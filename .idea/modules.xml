@@ -5,8 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/MutiImageLoader.iml" filepath="$PROJECT_DIR$/MutiImageLoader.iml" />
       <module fileurl="file://$PROJECT_DIR$/MutiImgLoader.iml" filepath="$PROJECT_DIR$/MutiImgLoader.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/mutiimgloader/mutiimgloader.iml" filepath="$PROJECT_DIR$/mutiimgloader/mutiimgloader.iml" />
       <module fileurl="file://$PROJECT_DIR$/mutiimgloader/mutiimgloader.iml" filepath="$PROJECT_DIR$/mutiimgloader/mutiimgloader.iml" />
     </modules>
   </component>

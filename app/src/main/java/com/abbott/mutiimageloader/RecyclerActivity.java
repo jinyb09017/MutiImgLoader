@@ -1,8 +1,7 @@
 package com.abbott.mutiimageloader;
 
-import android.graphics.Canvas;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,7 +55,6 @@ public class RecyclerActivity extends Activity {
         rv.setAdapter(adapter);
 
 
-
         initData();
 
         adapter.notifyDataSetChanged();
@@ -100,6 +98,7 @@ public class RecyclerActivity extends Activity {
             List<String> urls = mDatas.get(position);
 
             imageLoader.displayImages(urls, holder.imageView, 200, 200);
+            holder.tv.setText("this is title " + (position + 1));
         }
 
         @Override
@@ -112,10 +111,12 @@ public class RecyclerActivity extends Activity {
 
 
             CircularImageView imageView;
+            TextView tv;
 
             public MyViewHolder(View view) {
                 super(view);
                 imageView = (CircularImageView) view.findViewById(R.id.imageView);
+                tv = (TextView) view.findViewById(R.id.tv);
             }
         }
     }

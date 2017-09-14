@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.abbott.mutiimgloader.R;
@@ -21,6 +22,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -119,8 +122,32 @@ public class ImageLoader {
                 }
             } else {
 
-                CircularImageView circularImageView = (CircularImageView) result.joinView;
+                final CircularImageView circularImageView = (CircularImageView) result.joinView;
+                final String url = (String) result.joinView.getTag(IMG_URL);
                 circularImageView.setImageBitmaps(result.bitmaps);
+                circularImageView.post(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        final Bitmap bitmap = getCacheBitmapFromView(circularImageView);
+                        Runnable saveRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+
+                                try {
+                                    saveDru(url,bitmap);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        };
+
+                        threadPoolExecutor.execute(saveRunnable);
+
+                    }
+                });
+
+
             }
 
 
@@ -129,6 +156,40 @@ public class ImageLoader {
 
     };
 
+    private Bitmap getCacheBitmapFromView(View view) {
+        final boolean drawingCacheEnabled = true;
+        view.setDrawingCacheEnabled(drawingCacheEnabled);
+        view.buildDrawingCache(drawingCacheEnabled);
+        final Bitmap drawingCache = view.getDrawingCache();
+        Bitmap bitmap;
+        if (drawingCache != null) {
+            bitmap = Bitmap.createBitmap(drawingCache);
+            view.setDrawingCacheEnabled(false);
+        } else {
+            bitmap = null;
+        }
+        return bitmap;
+    }
+
+
+    protected void saveBitmapToSD(Bitmap bt, String url) {
+        File path = Environment.getExternalStorageDirectory();
+        String key = getKeyFromUrl(url);
+        File file = new File(path, key + ".png");
+        FileOutputStream out;
+        try {
+            out = new FileOutputStream(file);
+            bt.compress(Bitmap.CompressFormat.PNG, 90, out);
+            out.flush();
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
 
     /**
      * 异步加载
@@ -167,6 +228,31 @@ public class ImageLoader {
     public void displayImages(final List<String> urls, final CircularImageView imageView, final int dstWidth, final int dstHeight) {
         final String url = getNewUrlByList(urls);
         imageView.setTag(IMG_URL, url);
+
+        ArrayList arrayList = new ArrayList();
+        Bitmap bitmap = loadFromMemory(url);
+        if (bitmap != null) {
+            Log.e(Tag, "displayImages this is from Memory");
+            arrayList.add(bitmap);
+            imageView.setImageBitmaps(arrayList);
+            return;
+        }
+
+        try {
+            bitmap = loadFromDiskCache(url, dstWidth, dstHeight);
+            if (bitmap != null) {
+                Log.e(Tag, "displayImages this is from Disk");
+                arrayList.add(bitmap);
+                imageView.setImageBitmaps(arrayList);
+                return ;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
         //开启一个新的线程
         Runnable loadBitmapTask = new Runnable() {
             @Override
@@ -174,6 +260,7 @@ public class ImageLoader {
                 ArrayList<Bitmap> bitmaps = loadBitMaps(urls, dstWidth, dstHeight);
                 if (bitmaps != null && bitmaps.size() > 0) {
 
+                    Log.e(Tag, "displayImages this is from Merge");
                     Result result = new Result(bitmaps, url, imageView);
                     Message msg = mMainHandler.obtainMessage(MESSAGE_SEND_RESULT, result);
                     msg.sendToTarget();
@@ -187,6 +274,7 @@ public class ImageLoader {
 
     /**
      * 根据数组构造新的url
+     *
      * @param urls
      * @return
      */
@@ -261,7 +349,11 @@ public class ImageLoader {
     private ArrayList<Bitmap> loadBitMaps(List<String> urls, int dstWidth, int dstHeight) {
         ArrayList<Bitmap> bitmaps = new ArrayList<>();
         for (String url : urls) {
-            bitmaps.add(loadBitMap(url, dstWidth, dstHeight));
+            Bitmap bitmap = loadBitMap(url, dstWidth, dstHeight);
+            if (bitmap != null) {
+                bitmaps.add(bitmap);
+            }
+
         }
 
         return bitmaps;
@@ -299,6 +391,27 @@ public class ImageLoader {
             mDiskLruCache.flush();
         }
         return loadFromDiskCache(url, dstWidth, dstHeight);
+    }
+
+
+    public void saveDru(String url,Bitmap bitmap) throws IOException {
+
+        if (mDiskLruCache == null) {
+            return;
+        }
+        String key = getKeyFromUrl(url);
+        DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+        if (editor != null) {
+            OutputStream outputStream = editor.newOutputStream(0);
+            if (bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)) {
+                editor.commit();
+            } else {
+                editor.abort();
+            }
+            mDiskLruCache.flush();
+        }
+
+
     }
 
     /**
