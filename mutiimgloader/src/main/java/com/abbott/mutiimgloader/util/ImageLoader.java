@@ -51,7 +51,7 @@ import static android.content.ContentValues.TAG;
 public class ImageLoader {
 
     private static final int MESSAGE_SEND_RESULT = 100;
-    private static final int IMG_URL = R.layout.support_simple_spinner_dropdown_item;
+    private static final int IMG_URL = R.drawable.ic_launcher;//只是一个点位id,没有其它作用。
 
     private static final int CPU_COUNT = 4;
     private static final int CORE_POOL_SIZE = CPU_COUNT + 1; //corePoolSize为CPU数加1
@@ -62,6 +62,7 @@ public class ImageLoader {
     private static final long DISK_CACHE_SIZE = 1024 * 1024 * 30;
     private static final int BUF_SIZE = 1024 * 8;
     private Context mContext;
+    private int defaultId = R.drawable.ic_launcher_round;
 
 
     //获取当前进程的可用内存（单位KB）
@@ -92,6 +93,10 @@ public class ImageLoader {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void configDefaultPic(int defaultPic) {
+        this.defaultId = defaultId;
     }
 
     public static File getAppCacheDir(Context context, String dirName) {
@@ -125,27 +130,31 @@ public class ImageLoader {
                 final CircularImageView circularImageView = (CircularImageView) result.joinView;
                 final String url = (String) result.joinView.getTag(IMG_URL);
                 circularImageView.setImageBitmaps(result.bitmaps);
-                circularImageView.post(new Runnable() {
-                    @Override
-                    public void run() {
 
-                        final Bitmap bitmap = getCacheBitmapFromView(circularImageView);
-                        Runnable saveRunnable = new Runnable() {
-                            @Override
-                            public void run() {
-
-                                try {
-                                    saveDru(url,bitmap);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        };
-
-                        threadPoolExecutor.execute(saveRunnable);
-
+                if (url.equals(result.url)) {
+                    //当数目大于1的时候，才进行数据的缓存操作。
+                    if (result.bitmaps.size() <= 1) {
+                        return;
                     }
-                });
+
+                    final Bitmap bitmap = getCacheBitmapFromView(circularImageView);
+                    Runnable saveRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            try {
+                                saveDru(url, bitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+
+                    threadPoolExecutor.execute(saveRunnable);
+
+                } else {
+                    Log.w(TAG, "1 The url associated with imageView has changed");
+                }
 
 
             }
@@ -244,16 +253,21 @@ public class ImageLoader {
                 Log.e(Tag, "displayImages this is from Disk");
                 arrayList.add(bitmap);
                 imageView.setImageBitmaps(arrayList);
-                return ;
+                return;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        //设置一张默认图
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
+        arrayList.add(bitmap);
+        imageView.setImageBitmaps(arrayList);
+        Log.e(Tag, "displayImages this is from default");
 
 
-        //开启一个新的线程
+        //开启一个新的线程，同步加载所有的图片。如果加载成功，则返回。
         Runnable loadBitmapTask = new Runnable() {
             @Override
             public void run() {
@@ -394,7 +408,14 @@ public class ImageLoader {
     }
 
 
-    public void saveDru(String url,Bitmap bitmap) throws IOException {
+    /**
+     * 将合并的图像更新到指定的索引中
+     *
+     * @param url
+     * @param bitmap
+     * @throws IOException
+     */
+    public void saveDru(String url, Bitmap bitmap) throws IOException {
 
         if (mDiskLruCache == null) {
             return;
@@ -527,6 +548,7 @@ public class ImageLoader {
 
 
     private Bitmap loadFromMemory(String url) {
+        Log.e(Tag, "this is from memory:key=" + getKeyFromUrl(url));
         return mMemoryCache.get(getKeyFromUrl(url));
     }
 

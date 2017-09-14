@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,8 @@ public class RecyclerActivity extends Activity {
         setContentView(R.layout.activity_recycler);
 
         imageLoader = new ImageLoader(this);
+        imageLoader.configDefaultPic(R.drawable.ic_launcher_round);
+
         rv = (RecyclerView) findViewById(R.id.rv);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -63,7 +66,7 @@ public class RecyclerActivity extends Activity {
     }
 
     private void initData() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 200; i++) {
             int j = (int) (Math.random() * 6);
 
             if (j == 0) {
@@ -96,6 +99,7 @@ public class RecyclerActivity extends Activity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             List<String> urls = mDatas.get(position);
+            Log.e("ImageLoader","urls--"+(position + 1)+"--"+urls.size()+"--"+urls.get(0));
 
             imageLoader.displayImages(urls, holder.imageView, 200, 200);
             holder.tv.setText("this is title " + (position + 1));
