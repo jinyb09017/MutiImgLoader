@@ -510,6 +510,7 @@ public final class DiskLruCache implements Closeable {
     }
 
     /**
+     * 这里可能会导致同步问题。
      * Returns an editor for the entry named {@code key}, or null if another
      * edit is in progress.
      */

@@ -3,6 +3,7 @@ package com.abbott.mutiimgloader.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author jyb jyb_96@sina.com on 2017/9/8.
@@ -22,6 +23,15 @@ public class HttpUtils {
             e.printStackTrace();
         }
     }
+
+    public static void close(InputStream is) {
+        try {
+            is.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void close(BufferedOutputStream bos) {
         try {

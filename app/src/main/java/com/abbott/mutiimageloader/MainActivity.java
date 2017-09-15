@@ -22,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView iv_qq;
     ImageView iv_qq1;
     ImageView iv_qq2;
-
+    ImageView iv_test;
+    JImageLoader imageLoader;
     static List<String> urls = new ArrayList<>();
 
     static {
@@ -55,8 +56,9 @@ public class MainActivity extends AppCompatActivity {
         iv_qq = (ImageView) findViewById(R.id.iv_qq);
         iv_qq1 = (ImageView) findViewById(R.id.iv_qq1);
         iv_qq2 = (ImageView) findViewById(R.id.iv_qq2);
+        iv_test = (ImageView) findViewById(R.id.iv_test);
 
-        JImageLoader imageLoader = new JImageLoader(this);
+        imageLoader = new JImageLoader(this);
         imageLoader.configDefaultPic(R.drawable.ic_launcher_round);
 
         List<String> urls2 = new ArrayList<>();
@@ -87,5 +89,19 @@ public class MainActivity extends AppCompatActivity {
     public void onBitmapBtnQQ(View view) {
 
         startActivity(new Intent(this, RecyclerActivity.class).putExtra("tag", 2));
+    }
+
+    public void clearCacheBtn(View view) {
+
+        imageLoader.clear();
+    }
+    public void onBitmapBtnRefresh(View view) {
+        List<String> urls3 = new ArrayList<>();
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317401448&di=dc4492aeeb496dc73880c63c439186d6&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D877642269%2C2202333197%26fm%3D214%26gp%3D0.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=4f9b528159a635467f39746b91139829&imgtype=0&src=http%3A%2F%2Fwww.16sucai.com%2Fuploadfile%2F2011%2F1009%2F20111009041805525.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=086a4eed6ca7f934fe1c3765940cf867&imgtype=0&src=http%3A%2F%2Fb.zol-img.com.cn%2Fsjbizhi%2Fimages%2F6%2F320x510%2F1382519980823.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=a6fc4073f44d99befc39fe3c30be688f&imgtype=0&src=http%3A%2F%2Fb.zol-img.com.cn%2Fsjbizhi%2Fimages%2F6%2F320x510%2F1395393066343.jpg");
+
+        imageLoader.displayImages(urls3, iv_test, new WeixinMerge());
     }
 }

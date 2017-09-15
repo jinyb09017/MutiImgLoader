@@ -74,4 +74,35 @@
         android:onClick="onBitmapBtnQQ"
         android:padding="0px"
         android:text="进入QQ列表" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/iv_test"
+            android:layout_width="70dp"
+            android:background="@android:color/white"
+            android:layout_height="70dp" />
+
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0px"
+        android:onClick="onBitmapBtnRefresh"
+        android:padding="0px"
+        android:text="刷新测试" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0px"
+        android:onClick="clearCacheBtn"
+        android:padding="0px"
+        android:text="清除缓存（文件和内存）" />
 </LinearLayout>

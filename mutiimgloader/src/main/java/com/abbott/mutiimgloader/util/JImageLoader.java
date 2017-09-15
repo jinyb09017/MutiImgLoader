@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -191,6 +192,7 @@ public class JImageLoader {
             throw new IllegalArgumentException("mergeCallBack 不能为空");
         }
         final String url = getNewUrlByList(urls, mergeCallBack.getMark());
+
         imageView.setTag(IMG_URL, url);
 
         Bitmap bitmap = loadFromMemory(url);
@@ -212,7 +214,7 @@ public class JImageLoader {
             e.printStackTrace();
         }
 
-        //设置一张默认图
+//        设置一张默认图
         bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
         imageView.setImageBitmap(bitmap);
 
@@ -227,14 +229,21 @@ public class JImageLoader {
                 if (bitmaps != null && bitmaps.size() > 0) {
                     Result result;
                     if (mergeCallBack != null) {
-                        Bitmap mergeBitmap = mergeCallBack.merge(bitmaps, mContext, imageView);
 
-                        //加入缓存
-                        try {
-                            saveDru(url, mergeBitmap);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        Bitmap mergeBitmap = mergeCallBack.merge(bitmaps, mContext, imageView);
+                        if (urls.size() == bitmaps.size()) {
+
+
+                            //加入缓存
+                            try {
+                                saveDru(url, mergeBitmap);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.e(Tag, "size change. so can not save");
                         }
+
 
                         Log.e(Tag, "displayImages this is from Merge");
                         result = new Result(mergeBitmap, url, imageView);
@@ -320,6 +329,9 @@ public class JImageLoader {
 
             bitmap = loadFromNet(url, dstWidth, dstHeight);
             Log.e(Tag, "this is from Net");
+            if (bitmap == null) {
+                Log.e(Tag, "bitmap null network error");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -335,7 +347,6 @@ public class JImageLoader {
             if (bitmap != null) {
                 bitmaps.add(bitmap);
             }
-
         }
 
         return bitmaps;
@@ -362,17 +373,85 @@ public class JImageLoader {
         }
 
         String key = getKeyFromUrl(url);
+//        DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+
+        //如果这个key对应的缓存正在被编辑，则会返回null，因为DiskLruCache不允许同时编辑一个缓存对象。如果此时为空了，则直接走一步网络即可
+//        if (editor != null) {
+//            OutputStream outputStream = editor.newOutputStream(0);
+//            if (getStreamFromUrl(url, outputStream)) {
+//                editor.commit();
+//            } else {
+//                Log.e(Tag, "network load error");
+//                editor.abort();
+//            }
+//            mDiskLruCache.flush();
+//        }
+////        else {
+////
+////            Bitmap bitmap = loadFormNet(url);
+////            if (bitmap != null) {
+////                Log.e(Tag, "loadFormNet network ok");
+////                return bitmap;
+////            } else {
+////                Log.e(Tag, "loadFormNet network null");
+////            }
+////
+////        }
+
+        Bitmap bitmap = loadFormNet(url);
+
         DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+        //如果这个key对应的缓存正在被编辑，则会返回null，因为DiskLruCache不允许同时编辑一个缓存对象。
         if (editor != null) {
             OutputStream outputStream = editor.newOutputStream(0);
-            if (getStreamFromUrl(url, outputStream)) {
+            if (bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)) {
                 editor.commit();
             } else {
                 editor.abort();
             }
             mDiskLruCache.flush();
+        } else {
+            return bitmap;
         }
+
         return loadFromDiskCache(url, dstWidth, dstHeight);
+    }
+
+    /**
+     * 从网络拿到bitmap
+     *
+     * @param
+     * @return
+     */
+    private Bitmap loadFormNet(String urlString) {
+        HttpURLConnection urlConnection = null;
+        BufferedInputStream bis = null;
+        Bitmap bitmap = null;
+        InputStream is = null;
+
+        try {
+            final URL url = new URL(urlString);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            is = urlConnection.getInputStream();
+            bis = new BufferedInputStream(is);
+            bitmap = BitmapFactory.decodeStream(bis);
+
+            return bitmap;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+
+            HttpUtils.close(is);
+            HttpUtils.close(bis);
+        }
+
+        return bitmap;
     }
 
 
@@ -390,6 +469,8 @@ public class JImageLoader {
         }
         String key = getKeyFromUrl(url);
         DiskLruCache.Editor editor = mDiskLruCache.edit(key);
+        //如果这个key对应的缓存正在被编辑，则会返回null，因为DiskLruCache不允许同时编辑一个缓存对象。
+
         if (editor != null) {
             OutputStream outputStream = editor.newOutputStream(0);
             if (bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)) {
@@ -518,6 +599,21 @@ public class JImageLoader {
     private Bitmap loadFromMemory(String url) {
         Log.e(Tag, "this is from memory:key=" + getKeyFromUrl(url));
         return mMemoryCache.get(getKeyFromUrl(url));
+    }
+
+
+    public void clear() {
+        if (mDiskLruCache != null) {
+            try {
+                mDiskLruCache.delete();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (mMemoryCache != null) {
+            mMemoryCache.clear();
+        }
     }
 
 
