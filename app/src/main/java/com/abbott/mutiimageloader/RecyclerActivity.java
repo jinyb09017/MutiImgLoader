@@ -8,10 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.abbott.mutiimgloader.circularavatar.CircularImageView;
-import com.abbott.mutiimgloader.util.ImageLoader;
+import com.abbott.mutiimgloader.util.JImageLoader;
+import com.abbott.mutiimgloader.weixin.WeixinMerge;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class RecyclerActivity extends Activity {
     List<List<String>> mDatas = new ArrayList<>();
 
     static List<String> urls = new ArrayList<>();
-    ImageLoader imageLoader;
+    JImageLoader imageLoader;
 
     static {
         urls.add("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1505294718&di=b6934dd570c0c6962a8dbbb12eac27f5&src=http://www.zhlzw.com/UploadFiles/Article_UploadFiles/201204/20120412123914329.jpg");
@@ -48,9 +49,8 @@ public class RecyclerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
 
-        imageLoader = new ImageLoader(this);
+        imageLoader = new JImageLoader(this);
         imageLoader.configDefaultPic(R.drawable.ic_launcher_round);
-
         rv = (RecyclerView) findViewById(R.id.rv);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -67,7 +67,7 @@ public class RecyclerActivity extends Activity {
 
     private void initData() {
         for (int i = 0; i < 200; i++) {
-            int j = (int) (Math.random() * 6);
+            int j = (int) (Math.random() * 10);
 
             if (j == 0) {
                 j = 1;
@@ -99,9 +99,9 @@ public class RecyclerActivity extends Activity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             List<String> urls = mDatas.get(position);
-            Log.e("ImageLoader","urls--"+(position + 1)+"--"+urls.size()+"--"+urls.get(0));
+            Log.e("JImageLoader","urls--"+(position + 1)+"--"+urls.size()+"--"+urls.get(0));
 
-            imageLoader.displayImages(urls, holder.imageView, 200, 200);
+            imageLoader.displayImages(urls, holder.imageView,new WeixinMerge(), 200, 200);
             holder.tv.setText("this is title " + (position + 1));
         }
 
@@ -114,12 +114,12 @@ public class RecyclerActivity extends Activity {
         class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-            CircularImageView imageView;
+            ImageView imageView;
             TextView tv;
 
             public MyViewHolder(View view) {
                 super(view);
-                imageView = (CircularImageView) view.findViewById(R.id.imageView);
+                imageView = (ImageView) view.findViewById(R.id.imageView);
                 tv = (TextView) view.findViewById(R.id.tv);
             }
         }
