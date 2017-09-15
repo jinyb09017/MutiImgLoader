@@ -1,7 +1,7 @@
 package com.abbott.mutiimageloader;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,18 +11,25 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.abbott.mutiimgloader.call.MergeCallBack;
+import com.abbott.mutiimgloader.qq.QqMerge;
 import com.abbott.mutiimgloader.util.JImageLoader;
 import com.abbott.mutiimgloader.weixin.WeixinMerge;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerActivity extends Activity {
+public class RecyclerActivity extends AppCompatActivity {
     RecyclerView rv;
     List<List<String>> mDatas = new ArrayList<>();
 
     static List<String> urls = new ArrayList<>();
     JImageLoader imageLoader;
+
+    int tag = 1; //微信
+
+    MergeCallBack mergeCallBack;
+
 
     static {
         urls.add("https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1505294718&di=b6934dd570c0c6962a8dbbb12eac27f5&src=http://www.zhlzw.com/UploadFiles/Article_UploadFiles/201204/20120412123914329.jpg");
@@ -49,6 +56,7 @@ public class RecyclerActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler);
 
+
         imageLoader = new JImageLoader(this);
         imageLoader.configDefaultPic(R.drawable.ic_launcher_round);
         rv = (RecyclerView) findViewById(R.id.rv);
@@ -57,6 +65,15 @@ public class RecyclerActivity extends Activity {
         RecyclerAdapter adapter = new RecyclerAdapter();
         rv.setAdapter(adapter);
 
+        if (getIntent().hasExtra("tag")) {
+            tag = getIntent().getIntExtra("tag", 1);
+        }
+
+        if (tag == 1) {
+            mergeCallBack = new WeixinMerge();
+        } else if (tag == 2) {
+            mergeCallBack = new QqMerge();
+        }
 
         initData();
 
@@ -99,9 +116,9 @@ public class RecyclerActivity extends Activity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             List<String> urls = mDatas.get(position);
-            Log.e("JImageLoader","urls--"+(position + 1)+"--"+urls.size()+"--"+urls.get(0));
+            Log.e("JImageLoader", "urls--" + (position + 1) + "--" + urls.size() + "--" + urls.get(0));
 
-            imageLoader.displayImages(urls, holder.imageView,new WeixinMerge(), 200, 200);
+            imageLoader.displayImages(urls, holder.imageView, mergeCallBack);
             holder.tv.setText("this is title " + (position + 1));
         }
 

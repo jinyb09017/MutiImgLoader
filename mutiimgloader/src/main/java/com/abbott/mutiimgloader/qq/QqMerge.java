@@ -3,7 +3,6 @@ package com.abbott.mutiimgloader.qq;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -49,10 +48,15 @@ public class QqMerge implements MergeCallBack {
         Bitmap canvasBitmap = Bitmap.createBitmap(tempWidth, tempHeight,
                 Bitmap.Config.ARGB_8888);
         Canvas localCanvas = new Canvas(canvasBitmap);
-        localCanvas.drawColor(Color.WHITE);
+//        localCanvas.drawColor(Color.WHITE);
         JoinBitmaps.join(localCanvas, Math.min(tempWidth, tempHeight),
                 bitmapArray);
         return canvasBitmap;
+    }
+
+    @Override
+    public String getMark() {
+        return "qq@";
     }
 
     private  int dip2px(Context context, float value) {

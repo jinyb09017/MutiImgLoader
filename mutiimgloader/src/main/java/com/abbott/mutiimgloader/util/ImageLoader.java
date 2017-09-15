@@ -95,7 +95,7 @@ public class ImageLoader {
         }
     }
 
-    public void configDefaultPic(int defaultPic) {
+    public void configDefaultPic(int defaultPic){
         this.defaultId = defaultId;
     }
 

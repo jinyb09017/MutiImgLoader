@@ -15,7 +15,6 @@ import java.util.List;
 
 public class CombineNineRect {
     /**
-     * Éú³É9¹¬¸ñ »æÖÆÊý¾Ý
      *
      * @param combineWidth
      * @param combineHeight

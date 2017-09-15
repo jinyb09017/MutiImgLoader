@@ -1,117 +1,77 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/scrollView1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
+        <ImageView
+            android:id="@+id/iv_weixin"
+            android:layout_width="70dp"
+            android:background="@android:color/white"
+            android:layout_height="70dp" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
+        <ImageView
+            android:id="@+id/iv_weixin1"
+            android:layout_marginLeft="5dp"
+            android:layout_width="70dp"
+            android:background="@android:color/holo_green_dark"
+            android:layout_height="70dp" />
+        <ImageView
+            android:id="@+id/iv_weixin2"
+            android:layout_marginLeft="5dp"
+            android:background="@android:color/holo_red_dark"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
 
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView31"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView32"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView33"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView34"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView35"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView21"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView22"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView23"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView24"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView25"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical" >
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView1"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView2"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView3"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView4"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-
-                <com.abbott.mutiimgloader.circularavatar.CircularImageView
-                    android:id="@+id/circularImageView5"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onBitmapBtnClick"
-            android:text="Bitmap" />
     </LinearLayout>
 
-</ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0px"
+        android:onClick="onBitmapBtnWX"
+        android:padding="0px"
+        android:text="进入微信列表" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/iv_qq"
+            android:layout_width="70dp"
+            android:background="@android:color/white"
+            android:layout_height="70dp" />
+
+        <ImageView
+            android:id="@+id/iv_qq1"
+            android:layout_marginLeft="5dp"
+            android:layout_width="70dp"
+            android:background="@android:color/holo_green_dark"
+            android:layout_height="70dp" />
+        <ImageView
+            android:id="@+id/iv_qq2"
+            android:layout_marginLeft="5dp"
+            android:layout_width="70dp"
+            android:background="@android:color/holo_red_dark"
+            android:layout_height="70dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0px"
+        android:onClick="onBitmapBtnQQ"
+        android:padding="0px"
+        android:text="进入QQ列表" />
+</LinearLayout>

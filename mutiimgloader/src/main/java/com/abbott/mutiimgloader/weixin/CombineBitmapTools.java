@@ -24,8 +24,14 @@ public class CombineBitmapTools {
 
     public static Bitmap combimeBitmap(Context context, int combineWidth,
                                        int combineHeight, List<Bitmap> bitmaps) {
-        if (bitmaps == null || bitmaps.size() == 0 || bitmaps.size() > 9 )
+        if (bitmaps == null || bitmaps.size() == 0)
             return null;
+
+        if (bitmaps.size() >= 9) {
+            bitmaps = bitmaps.subList(0, 9);
+        }
+
+
         Bitmap resultBitmap = null;
         int len = bitmaps.size();
         // 绘制数据

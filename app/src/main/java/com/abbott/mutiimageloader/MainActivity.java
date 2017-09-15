@@ -1,32 +1,27 @@
 package com.abbott.mutiimageloader;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.abbott.mutiimgloader.circularavatar.CircularImageView;
-import com.abbott.mutiimgloader.util.ImageLoader;
+import com.abbott.mutiimgloader.qq.QqMerge;
+import com.abbott.mutiimgloader.util.JImageLoader;
+import com.abbott.mutiimgloader.weixin.WeixinMerge;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
-    ArrayList<Bitmap> mBmps1 = new ArrayList<Bitmap>();
-    ArrayList<Bitmap> mBmps2 = new ArrayList<Bitmap>();
-    ArrayList<Bitmap> mBmps3 = new ArrayList<Bitmap>();
-    ArrayList<Bitmap> mBmps4 = new ArrayList<Bitmap>();
-    ArrayList<Bitmap> mBmps5 = new ArrayList<Bitmap>();
-
-    CircularImageView mImageView1;
-    CircularImageView mImageView2;
-    CircularImageView mImageView3;
-    CircularImageView mImageView4;
-    CircularImageView mImageView5;
+    ImageView iv_weixin;
+    ImageView iv_weixin1;
+    ImageView iv_weixin2;
+    ImageView iv_qq;
+    ImageView iv_qq1;
+    ImageView iv_qq2;
 
     static List<String> urls = new ArrayList<>();
 
@@ -54,74 +49,43 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // test data
-        Bitmap avatar1 = BitmapFactory.decodeResource(getResources(), R.drawable.headshow1);
-        Bitmap avatar2 = BitmapFactory.decodeResource(getResources(), R.drawable.headshow2);
-        Bitmap avatar3 = BitmapFactory.decodeResource(getResources(), R.drawable.headshow3);
-        Bitmap avatar4 = BitmapFactory.decodeResource(getResources(), R.drawable.headshow4);
-        Bitmap avatar5 = BitmapFactory.decodeResource(getResources(), R.drawable.headshow5);
+        iv_weixin = (ImageView) findViewById(R.id.iv_weixin);
+        iv_weixin1 = (ImageView) findViewById(R.id.iv_weixin1);
+        iv_weixin2 = (ImageView) findViewById(R.id.iv_weixin2);
+        iv_qq = (ImageView) findViewById(R.id.iv_qq);
+        iv_qq1 = (ImageView) findViewById(R.id.iv_qq1);
+        iv_qq2 = (ImageView) findViewById(R.id.iv_qq2);
 
-        mBmps1.add(avatar1);
-        mBmps2.add(avatar1);
-        mBmps3.add(avatar1);
-        mBmps4.add(avatar1);
-        mBmps5.add(avatar1);
+        JImageLoader imageLoader = new JImageLoader(this);
+        imageLoader.configDefaultPic(R.drawable.ic_launcher_round);
 
-        mBmps2.add(avatar2);
-        mBmps3.add(avatar2);
-        mBmps4.add(avatar2);
-        mBmps5.add(avatar2);
+        List<String> urls2 = new ArrayList<>();
+        urls2.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317523533&di=a1fef3d8ef1dcbd564c9e59d6ac6c3d5&imgtype=jpg&src=http%3A%2F%2Fimg4.imgtn.bdimg.com%2Fit%2Fu%3D2277168614%2C4145779101%26fm%3D214%26gp%3D0.jpg");
+        urls2.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145469&di=e9d63be606584c29bc5bc8abf109dc9d&imgtype=0&src=http%3A%2F%2Fs4.sinaimg.cn%2Fmw690%2F609f8b00gd5ee83e31233%26690");
 
-        mBmps3.add(avatar3);
-        mBmps4.add(avatar3);
-        mBmps5.add(avatar3);
 
-        mBmps4.add(avatar4);
-        mBmps5.add(avatar4);
+        List<String> urls3 = new ArrayList<>();
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317401448&di=dc4492aeeb496dc73880c63c439186d6&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D877642269%2C2202333197%26fm%3D214%26gp%3D0.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=4f9b528159a635467f39746b91139829&imgtype=0&src=http%3A%2F%2Fwww.16sucai.com%2Fuploadfile%2F2011%2F1009%2F20111009041805525.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=086a4eed6ca7f934fe1c3765940cf867&imgtype=0&src=http%3A%2F%2Fb.zol-img.com.cn%2Fsjbizhi%2Fimages%2F6%2F320x510%2F1382519980823.jpg");
+        urls3.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505317145471&di=a6fc4073f44d99befc39fe3c30be688f&imgtype=0&src=http%3A%2F%2Fb.zol-img.com.cn%2Fsjbizhi%2Fimages%2F6%2F320x510%2F1395393066343.jpg");
 
-        mBmps5.add(avatar5);
 
-        mImageView1 = (CircularImageView) findViewById(R.id.circularImageView1);
-        mImageView2 = (CircularImageView) findViewById(R.id.circularImageView2);
-        mImageView3 = (CircularImageView) findViewById(R.id.circularImageView3);
-        mImageView4 = (CircularImageView) findViewById(R.id.circularImageView4);
-        mImageView5 = (CircularImageView) findViewById(R.id.circularImageView5);
-
-        mImageView1.setImageBitmaps(mBmps1);
-        mImageView2.setImageBitmaps(mBmps2);
-        mImageView3.setImageBitmaps(mBmps3);
-        mImageView4.setImageBitmaps(mBmps4);
-        mImageView5.setImageBitmaps(mBmps5);
-
-//        new ImageLoader(this).displayImages(urls,mImageView1,200,200);
-
-        CircularImageView mImageView21 = (CircularImageView) findViewById(R.id.circularImageView21);
-        CircularImageView mImageView22 = (CircularImageView) findViewById(R.id.circularImageView22);
-        CircularImageView mImageView23 = (CircularImageView) findViewById(R.id.circularImageView23);
-        CircularImageView mImageView24 = (CircularImageView) findViewById(R.id.circularImageView24);
-        CircularImageView mImageView25 = (CircularImageView) findViewById(R.id.circularImageView25);
-
-        mImageView21.setImageBitmaps(mBmps1);
-        mImageView22.setImageBitmaps(mBmps2);
-        mImageView23.setImageBitmaps(mBmps3);
-        mImageView24.setImageBitmaps(mBmps4);
-        mImageView25.setImageBitmaps(mBmps5);
-
-        CircularImageView mImageView31 = (CircularImageView) findViewById(R.id.circularImageView31);
-        CircularImageView mImageView32 = (CircularImageView) findViewById(R.id.circularImageView32);
-        CircularImageView mImageView33 = (CircularImageView) findViewById(R.id.circularImageView33);
-        CircularImageView mImageView34 = (CircularImageView) findViewById(R.id.circularImageView34);
-        CircularImageView mImageView35 = (CircularImageView) findViewById(R.id.circularImageView35);
-
-        mImageView31.setImageBitmaps(mBmps1);
-        mImageView32.setImageBitmaps(mBmps2);
-        mImageView33.setImageBitmaps(mBmps3);
-        mImageView34.setImageBitmaps(mBmps4);
-        mImageView35.setImageBitmaps(mBmps5);
+        imageLoader.displayImages(urls, iv_weixin, new WeixinMerge());
+        imageLoader.displayImages(urls2, iv_weixin1, new WeixinMerge());
+        imageLoader.displayImages(urls3, iv_weixin2, new WeixinMerge());
+        imageLoader.displayImages(urls, iv_qq, new QqMerge());
+        imageLoader.displayImages(urls2, iv_qq1, new QqMerge());
+        imageLoader.displayImages(urls3, iv_qq2, new QqMerge());
 
     }
 
-    public void onBitmapBtnClick(View view) {
-        startActivity(new Intent(this, RecyclerActivity.class));
+    public void onBitmapBtnWX(View view) {
+        startActivity(new Intent(this, RecyclerActivity.class).putExtra("tag", 1));
+    }
+
+    public void onBitmapBtnQQ(View view) {
+
+        startActivity(new Intent(this, RecyclerActivity.class).putExtra("tag", 2));
     }
 }

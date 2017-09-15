@@ -3,6 +3,7 @@ package com.abbott.mutiimgloader.weixin;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.abbott.mutiimgloader.call.MergeCallBack;
@@ -24,10 +25,28 @@ public class WeixinMerge implements MergeCallBack {
     public Bitmap merge(List<Bitmap> bitmapArray, Context context, ImageView imageView) {
         this.context = context;
 
-        return CombineBitmapTools.combimeBitmap(context, dip2px(context,75), dip2px(context,75),
+        // 画布的宽
+        ViewGroup.LayoutParams lp = imageView.getLayoutParams();
+        int tempWidth;
+        int tempHeight;
+        if (lp != null) {
+            tempWidth = dip2px(context, lp.width);
+            tempHeight = dip2px(context, lp.height);
+        } else {
+            //否则给一个默认的高度
+            tempWidth = dip2px(context, 70);
+            tempHeight = dip2px(context, 70);
+        }
+
+
+        return CombineBitmapTools.combimeBitmap(context, tempWidth, tempHeight,
                 bitmapArray);
     }
 
+    @Override
+    public String getMark() {
+        return "wx@";
+    }
 
 
     private int dip2px(Context context, float value) {

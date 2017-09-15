@@ -164,33 +164,57 @@ public class JImageLoader {
         threadPoolExecutor.execute(loadBitmapTask);
     }
 
+    /**
+     * 默认按100 100的方法来存储
+     *
+     * @param urls
+     * @param imageView
+     * @param mergeCallBack
+     */
+    public void displayImages(final List<String> urls, final ImageView imageView, final MergeCallBack mergeCallBack) {
+        displayImages(urls, imageView, mergeCallBack, 200, 200);
+    }
 
+    /**
+     * @param urls
+     * @param imageView
+     * @param mergeCallBack
+     * @param dstWidth      用于单个图像的压缩存储
+     * @param dstHeight
+     */
     public void displayImages(final List<String> urls, final ImageView imageView, final MergeCallBack mergeCallBack, final int dstWidth, final int dstHeight) {
-        final String url = getNewUrlByList(urls);
+        if (urls == null || urls.size() <= 0) {
+            throw new IllegalArgumentException("url不能为空");
+        }
+
+        if (mergeCallBack == null) {
+            throw new IllegalArgumentException("mergeCallBack 不能为空");
+        }
+        final String url = getNewUrlByList(urls, mergeCallBack.getMark());
         imageView.setTag(IMG_URL, url);
 
-//        Bitmap bitmap = loadFromMemory(url);
-//        if (bitmap != null) {
-//            Log.e(Tag, "displayImages this is from Memory");
-//            imageView.setImageBitmap(bitmap);
-//            return;
-//        }
-//
-//        try {
-//            bitmap = loadFromDiskCache(url, dstWidth, dstHeight);
-//            if (bitmap != null) {
-//                Log.e(Tag, "displayImages this is from Disk");
-//                imageView.setImageBitmap(bitmap);
-//                return;
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        Bitmap bitmap = loadFromMemory(url);
+        if (bitmap != null) {
+            Log.e(Tag, "displayImages this is from Memory");
+            imageView.setImageBitmap(bitmap);
+            return;
+        }
+
+        try {
+            bitmap = loadFromDiskCache(url, dstWidth, dstHeight);
+            if (bitmap != null) {
+                Log.e(Tag, "displayImages this is from Disk");
+                imageView.setImageBitmap(bitmap);
+                return;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         //设置一张默认图
-//        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
-//        imageView.setImageBitmap(bitmap);
+        bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
+        imageView.setImageBitmap(bitmap);
 
         Log.e(Tag, "displayImages this is from default");
 
@@ -203,7 +227,7 @@ public class JImageLoader {
                 if (bitmaps != null && bitmaps.size() > 0) {
                     Result result;
                     if (mergeCallBack != null) {
-                        Bitmap mergeBitmap = mergeCallBack.merge(bitmaps, mContext,imageView);
+                        Bitmap mergeBitmap = mergeCallBack.merge(bitmaps, mContext, imageView);
 
                         //加入缓存
                         try {
@@ -215,7 +239,7 @@ public class JImageLoader {
                         Log.e(Tag, "displayImages this is from Merge");
                         result = new Result(mergeBitmap, url, imageView);
 
-                    }else{
+                    } else {
                         result = new Result(bitmaps.get(0), url, imageView);
                     }
 
@@ -236,10 +260,10 @@ public class JImageLoader {
      * @param urls
      * @return
      */
-    public String getNewUrlByList(List<String> urls) {
+    public String getNewUrlByList(List<String> urls, String mark) {
         StringBuilder sb = new StringBuilder();
         for (String url : urls) {
-            sb.append(url+"@");
+            sb.append(url + mark);
         }
 
         return sb.toString();
