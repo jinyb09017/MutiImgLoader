@@ -2,6 +2,14 @@ mutiImgLoader是一个实现了DiskLruCache磁盘缓存，Dru内存缓存的图�
 
 mutiImgLoader使用非常简单。
 
+
+### 添加依赖
+
+```
+compile 'com.abbott.mutiimgloader:mutiimgloader:1.0.0'
+```
+
+
 ### 1、单图加载
 
 
@@ -47,7 +55,9 @@ ps:由于merge图像的合成是十分消耗性能的，所以框架自动实现
 
 ![image](./screenshot/1.png)
 
-### 微信加载
+### 微信加载(动态图加载比较慢)
+![image](./screenshot/3.png)
 ![image](./screenshot/3.gif)
-### QQ头像加载
+### QQ头像加载(动态图加载比较慢)
+![image](./screenshot/4.png)
 ![image](./screenshot/4.gif)
