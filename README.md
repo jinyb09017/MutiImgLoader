@@ -1,4 +1,4 @@
-mutiImgLoader是一个实现了DiskLruCache磁盘缓存，Dru内存缓存的图片加载框架。目前内置了微信群头像，QQ群头像的合成加载。并支持自定义扩展其他合成图像方案。
+mutiImgLoader是一个实现了DiskLruCache磁盘缓存，Lru内存缓存的图片加载框架。目前内置了微信群头像，QQ群头像的合成加载。并支持自定义扩展其他合成图像方案。
 
 mutiImgLoader使用非常简单。
 
