@@ -39,7 +39,15 @@ public interface MergeCallBack {
 
 ps:由于merge图像的合成是十分消耗性能的，所以框架自动实现了合并后的图片文件和磁盘缓存和内存缓存。在第二次加载的时候，可以流畅的显示出来。
 
-内部实现原理图
+### 内部实现原理图
+
 ![image](./screenshot/2.png)
-演示图如下
+
+### 演示图如下
+
 ![image](./screenshot/1.png)
+
+### 微信加载
+![image](./screenshot/3.gif)
+### QQ头像加载
+![image](./screenshot/4.gif)
