@@ -116,7 +116,7 @@ public class RecyclerActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             List<String> urls = mDatas.get(position);
-            Log.e("JImageLoader", "urls--" + (position + 1) + "--" + urls.size() + "--" + urls.get(0));
+            LogUtil.e("JImageLoader", "urls--" + (position + 1) + "--" + urls.size() + "--" + urls.get(0));
 
             imageLoader.displayImages(urls, holder.imageView, mergeCallBack);
             holder.tv.setText("this is title " + (position + 1));

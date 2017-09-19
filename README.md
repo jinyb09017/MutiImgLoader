@@ -1,5 +1,7 @@
 mutiImgLoader是一个实现了DiskLruCache磁盘缓存，Lru内存缓存的图片加载框架。目前内置了微信群头像，QQ群头像的合成加载。并支持自定义扩展其他合成图像方案。
 
+[博客介绍](https://jinyb09017.github.io/2017/09/%E5%A4%9A%E5%9B%BE%E5%90%88%E5%B9%B6%E6%A1%86%E6%9E%B6%E5%AE%9E%E7%8E%B0(android)/)
+
 mutiImgLoader使用非常简单。
 
 

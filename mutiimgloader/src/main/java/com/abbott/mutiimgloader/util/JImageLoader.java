@@ -197,7 +197,7 @@ public class JImageLoader {
 
         Bitmap bitmap = loadFromMemory(url);
         if (bitmap != null) {
-            Log.e(Tag, "displayImages this is from Memory");
+            LogUtil.e(Tag, "displayImages this is from Memory");
             imageView.setImageBitmap(bitmap);
             return;
         }
@@ -205,7 +205,7 @@ public class JImageLoader {
         try {
             bitmap = loadFromDiskCache(url, dstWidth, dstHeight);
             if (bitmap != null) {
-                Log.e(Tag, "displayImages this is from Disk");
+                LogUtil.e(Tag, "displayImages this is from Disk");
                 imageView.setImageBitmap(bitmap);
                 return;
             }
@@ -218,7 +218,7 @@ public class JImageLoader {
         bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ic_launcher_round);
         imageView.setImageBitmap(bitmap);
 
-        Log.e(Tag, "displayImages this is from default");
+        LogUtil.e(Tag, "displayImages this is from default");
 
 
         //开启一个新的线程，同步加载所有的图片。如果加载成功，则返回。
@@ -241,11 +241,11 @@ public class JImageLoader {
                                 e.printStackTrace();
                             }
                         } else {
-                            Log.e(Tag, "size change. so can not save");
+                            LogUtil.e(Tag, "size change. so can not save");
                         }
 
 
-                        Log.e(Tag, "displayImages this is from Merge");
+                        LogUtil.e(Tag, "displayImages this is from Merge");
                         result = new Result(mergeBitmap, url, imageView);
 
                     } else {
@@ -316,21 +316,21 @@ public class JImageLoader {
     private Bitmap loadBitMap(String url, int dstWidth, int dstHeight) {
         Bitmap bitmap = loadFromMemory(url);
         if (bitmap != null) {
-            Log.e(Tag, "this is from Memory");
+            LogUtil.e(Tag, "this is from Memory");
             return bitmap;
         }
 
         try {
             bitmap = loadFromDiskCache(url, dstWidth, dstHeight);
             if (bitmap != null) {
-                Log.e(Tag, "this is from Disk");
+                LogUtil.e(Tag, "this is from Disk");
                 return bitmap;
             }
 
             bitmap = loadFromNet(url, dstWidth, dstHeight);
-            Log.e(Tag, "this is from Net");
+            LogUtil.e(Tag, "this is from Net");
             if (bitmap == null) {
-                Log.e(Tag, "bitmap null network error");
+                LogUtil.e(Tag, "bitmap null network error");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -373,30 +373,6 @@ public class JImageLoader {
         }
 
         String key = getKeyFromUrl(url);
-//        DiskLruCache.Editor editor = mDiskLruCache.edit(key);
-
-        //如果这个key对应的缓存正在被编辑，则会返回null，因为DiskLruCache不允许同时编辑一个缓存对象。如果此时为空了，则直接走一步网络即可
-//        if (editor != null) {
-//            OutputStream outputStream = editor.newOutputStream(0);
-//            if (getStreamFromUrl(url, outputStream)) {
-//                editor.commit();
-//            } else {
-//                Log.e(Tag, "network load error");
-//                editor.abort();
-//            }
-//            mDiskLruCache.flush();
-//        }
-////        else {
-////
-////            Bitmap bitmap = loadFormNet(url);
-////            if (bitmap != null) {
-////                Log.e(Tag, "loadFormNet network ok");
-////                return bitmap;
-////            } else {
-////                Log.e(Tag, "loadFormNet network null");
-////            }
-////
-////        }
 
         Bitmap bitmap = loadFormNet(url);
 
@@ -597,7 +573,7 @@ public class JImageLoader {
 
 
     private Bitmap loadFromMemory(String url) {
-        Log.e(Tag, "this is from memory:key=" + getKeyFromUrl(url));
+        LogUtil.e(Tag, "this is from memory:key=" + getKeyFromUrl(url));
         return mMemoryCache.get(getKeyFromUrl(url));
     }
 
