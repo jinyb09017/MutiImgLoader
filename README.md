@@ -8,7 +8,7 @@ mutiImgLoader使用非常简单。
 ### 添加依赖
 
 ```
-compile 'com.abbott.mutiimgloader:mutiimgloader:1.0.0'
+compile 'com.abbott.mutiimgloader:mutiimgloader:1.0.1'
 ```
 
 
